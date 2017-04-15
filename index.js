@@ -10,9 +10,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Meetup API allows 30 requests every 10 seconds.
-const limiter = new RateLimiter(30, 10000);
+const limiter = new RateLimiter(15, 10000);
 
-// Create a new object, that prototypically inherits from the Error constructor
 function MeetupError(request) {
   this.status = request.status;
   this.statusText = request.statusText;
@@ -21,8 +20,8 @@ function MeetupError(request) {
 MeetupError.prototype = Object.create(Error.prototype);
 MeetupError.prototype.constructor = MeetupError;
 
-const MANCREACT_EVENT_ID = 19507463;
-const MANCREACT_URL_NAME = 'Manchester-React-User-Group';
+const MANCREACT_EVENT_ID = process.env.MEETUP_GROUP_ID;
+const MANCREACT_URL_NAME = process.env.MEETUP_URL_NAME;
 const MEETUP_API_ROOT = 'https://api.meetup.com/';
 
 const meetupAPI = async (uri, args) => {
@@ -74,6 +73,10 @@ app.get('/events/:id/rsvps', async (req, res, next) => {
   res.send(await meetupAPI(MANCREACT_URL_NAME + `/events/${req.params.id}/rsvps`, {
     response: 'yes',
   }));
+});
+
+app.get('/events/:id/comments', async (req, res, next) => {
+  res.send(await meetupAPI(MANCREACT_URL_NAME + `/events/${req.params.id}/comments`));
 });
 
 srv.listen(3000, function () {
