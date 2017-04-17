@@ -2,19 +2,29 @@
   "name": "mancreact-server",
   "scripts": {
     "start": "node index",
-    "dev": "NODE_ENV=development nodemon index"
+    "dev": "NODE_ENV=development nodemon index",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "body-parser": "^1.15.0",
     "cors": "^2.8.3",
     "express": "^4.13.4",
     "limiter": "^1.1.0",
+    "memory-cache": "^0.1.6",
     "micro": "latest",
     "node-fetch": "^1.6.3",
     "query-string": "^4.3.2"
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
+    "husky": "^0.13.3",
+    "lint-staged": "^3.4.0",
     "nodemon": "^1.11.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --single-quote --trailing-comma=es5 --write tab-width=2",
+      "git add"
+    ]
   }
 }
