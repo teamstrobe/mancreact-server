@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Meetup API allows 30 requests every 10 seconds.
-const limiter = new RateLimiter(15, 10000);
+const limiter = new RateLimiter(20, 10000);
 
 function MeetupError(request) {
   this.status = request.status;
@@ -26,7 +26,6 @@ const MEETUP_API_ROOT = 'https://api.meetup.com/';
 
 const meetupAPI = async (uri, req, args) => {
   const noArgs = args == null;
-  console.log('args', args);
   let url =
     MEETUP_API_ROOT + uri + (noArgs ? '' : `?${queryString.stringify(args)}`);
   url += noArgs ? '?' : '&';
@@ -37,7 +36,6 @@ const meetupAPI = async (uri, req, args) => {
   } else {
     url += `key=${process.env.MEETUP_KEY}`;
   }
-  console.log('url', url);
   const request = await fetch(url, {
     method: req.method,
   });
@@ -131,7 +129,6 @@ app.post('/events/:id/rsvps', async (req, res, next) => {
     );
     res.send(response);
   } catch (err) {
-    console.log('rsvp failed', err);
     res.status(err.status).send(err.statusText);
   }
 });
