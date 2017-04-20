@@ -100,22 +100,26 @@ app.get('/events/:id', cache(), async (req, res, next) => {
         status: 'past,upcoming,draft',
       }
     );
+    res.send(response);
   } catch (err) {
-    console.log(err);
+    res.status(err.status).send(err.statusText);
   }
-  res.send(response);
 });
 
 app.get('/events/:id/rsvps', async (req, res, next) => {
-  res.send(
-    await meetupAPI(
-      MANCREACT_URL_NAME + `/events/${req.params.id}/rsvps`,
-      req,
-      {
-        response: 'yes',
-      }
-    )
-  );
+  try {
+    res.send(
+      await meetupAPI(
+        MANCREACT_URL_NAME + `/events/${req.params.id}/rsvps`,
+        req,
+        {
+          response: 'yes',
+        }
+      )
+    );
+  } catch (err) {
+    res.status(err.status).send(err.statusText);
+  }
 });
 
 app.post('/events/:id/rsvps', async (req, res, next) => {
@@ -152,10 +156,10 @@ app.post('/events/:id/comments', async (req, res, next) => {
         comment: req.query.comment,
       }
     );
+    res.send(response);
   } catch (err) {
-    console.log(err);
+    res.status(err.status).send(err.statusText);
   }
-  res.send(response);
 });
 
 app.get('/members/self', async (req, res, next) => {
